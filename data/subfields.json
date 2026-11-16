@@ -1,14 +1,146 @@
 [
-  {"id":"public-health","name":"Public health and population research","area":"Healthcare"},
-  {"id":"health-systems","name":"Health systems, services and health informatics","area":"Healthcare"},
-  {"id":"systems-engineering","name":"Systems engineering, reliability and engineering management","area":"Engineering"},
-  {"id":"operations-simulation","name":"Operations research, decision science and simulation","area":"Engineering"},
-  {"id":"informatics-computing","name":"Computer science, AI, data and research software","area":"Informatics"},
-  {"id":"computational-biology","name":"Bioinformatics and computational biology","area":"Informatics"},
-  {"id":"computational-physical-sciences","name":"Computational physics, chemistry and materials","area":"Informatics"},
-  {"id":"economics","name":"Economics, econometrics and research economics","area":"Economics"},
-  {"id":"psychology-behavior","name":"Psychology, judgment and behavioral science","area":"Social and Behavioral Sciences"},
-  {"id":"sociology-organizations","name":"Sociology, organizations and collaboration","area":"Social and Behavioral Sciences"},
-  {"id":"public-policy","name":"Public policy, governance and administration","area":"Public Policy"},
-  {"id":"meta-research","name":"Meta-research, evidence synthesis and scholarly communication","area":"Cross-cutting"}
+  {
+    "id": "public-health",
+    "name": "Public health and population research",
+    "area": "Healthcare",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "health-systems",
+    "name": "Health systems, services and health informatics",
+    "area": "Healthcare",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "systems-engineering",
+    "name": "Systems engineering, reliability and engineering management",
+    "area": "Engineering",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "operations-simulation",
+    "name": "Operations research, decision science and simulation",
+    "area": "Engineering",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "informatics-computing",
+    "name": "Computer science, AI, data and research software",
+    "area": "Informatics",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "computational-biology",
+    "name": "Bioinformatics and computational biology",
+    "area": "Informatics",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "computational-physical-sciences",
+    "name": "Computational physics, chemistry and materials",
+    "area": "Informatics",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "economics",
+    "name": "Economics, econometrics and research economics",
+    "area": "Economics",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "psychology-behavior",
+    "name": "Psychology, judgment and behavioral science",
+    "area": "Social and Behavioral Sciences",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "sociology-organizations",
+    "name": "Sociology, organizations and collaboration",
+    "area": "Social and Behavioral Sciences",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "public-policy",
+    "name": "Public policy, governance and administration",
+    "area": "Public Policy",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "meta-research",
+    "name": "Meta-research, evidence synthesis and scholarly communication",
+    "area": "Cross-cutting",
+    "campaign_type": "existing"
+  },
+  {
+    "id": "epidemiology-biostatistics",
+    "name": "Epidemiology and biostatistics",
+    "area": "Healthcare",
+    "campaign_type": "new"
+  },
+  {
+    "id": "environmental-public-health",
+    "name": "Environmental and occupational public health",
+    "area": "Healthcare",
+    "campaign_type": "new"
+  },
+  {
+    "id": "health-economics",
+    "name": "Health economics and economic evaluation",
+    "area": "Economics",
+    "campaign_type": "new"
+  },
+  {
+    "id": "software-engineering",
+    "name": "Software engineering and formal methods",
+    "area": "Informatics",
+    "campaign_type": "new"
+  },
+  {
+    "id": "cybersecurity-privacy",
+    "name": "Cybersecurity, privacy and digital trust",
+    "area": "Informatics",
+    "campaign_type": "new"
+  },
+  {
+    "id": "human-computer-interaction",
+    "name": "Human-computer interaction and human factors",
+    "area": "Informatics",
+    "campaign_type": "new"
+  },
+  {
+    "id": "robotics-control",
+    "name": "Robotics, control and autonomous systems",
+    "area": "Engineering",
+    "campaign_type": "new"
+  },
+  {
+    "id": "energy-environmental-engineering",
+    "name": "Energy systems and environmental engineering",
+    "area": "Engineering",
+    "campaign_type": "new"
+  },
+  {
+    "id": "statistics-applied-mathematics",
+    "name": "Statistics, probability and applied mathematics",
+    "area": "Cross-cutting",
+    "campaign_type": "new"
+  },
+  {
+    "id": "education-learning-sciences",
+    "name": "Education and learning sciences",
+    "area": "Social and Behavioral Sciences",
+    "campaign_type": "new"
+  },
+  {
+    "id": "political-science",
+    "name": "Political science and international relations",
+    "area": "Public Policy",
+    "campaign_type": "new"
+  },
+  {
+    "id": "business-innovation",
+    "name": "Business, innovation and technology management",
+    "area": "Economics",
+    "campaign_type": "new"
+  }
 ]

@@ -19,12 +19,16 @@ def export(hub):
     target = hub / 'publications/venues'
     target.mkdir(exist_ok=True)
     text = (ROOT / 'DIRECTORY.md').read_text().replace('docs/subfields/', 'subfields/').replace('docs/methodology.md', 'methodology.md')
-    text += '\nThis is a generated snapshot of the OSRI free-publication directory. The [snapshot manifest](snapshot.json) and [evidence receipt](build-receipt.json) preserve its source hashes. [Download the venue CSV](venues.csv), [inspect JSON](venues.json), or read the [agent findings and excluded leads](RESEARCH_NOTES.md).\n'
+    text += '\nThis is a generated snapshot of the OSRI free-publication directory. The [snapshot manifest](snapshot.json) and [evidence receipt](build-receipt.json) preserve its source hashes. [Download the venue CSV](venues.csv), [inspect JSON](venues.json), review [all audited candidates](candidates.json) and [exclusions](excluded-venues.json), or read the [agent findings](RESEARCH_NOTES.md).\n'
     (target / 'README.md').write_text(text)
     shutil.copy2(ROOT / 'docs/methodology.md', target / 'methodology.md')
-    shutil.copy2(ROOT / 'index.html', target / 'browser.html')
+    browser = (ROOT / 'index.html').read_text(encoding='utf-8')
+    for old, new in [('href="DIRECTORY.md"', 'href="README.md"'), ('href="docs/methodology.md"', 'href="methodology.md"'), ('href="data/venues.csv"', 'href="venues.csv"'), ('href="data/venues.json"', 'href="venues.json"')]:
+        browser = browser.replace(old, new)
+    (target / 'browser.html').write_text(browser, encoding='utf-8')
+    shutil.copy2(ROOT / 'LICENSE.md', target / 'LICENSE.md')
     shutil.copytree(ROOT / 'docs/subfields', target / 'subfields', dirs_exist_ok=True)
-    for source in ['data/venues.csv', 'data/venues.json', 'data/build-receipt.json', 'data/validation.json']:
+    for source in ['data/venues.csv', 'data/venues.json', 'data/candidates.json', 'data/excluded-venues.json', 'data/memberships.json', 'data/coverage.json', 'data/agent-assignments.json', 'data/build-receipt.json', 'data/validation.json']:
         shutil.copy2(ROOT / source, target / Path(source).name)
     shutil.copy2(ROOT / 'RESEARCH_NOTES.md', target / 'RESEARCH_NOTES.md')
     (target / 'research').mkdir(exist_ok=True)
