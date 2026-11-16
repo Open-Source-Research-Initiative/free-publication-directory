@@ -2,7 +2,7 @@
 
 OSRI's directory of research venues that offer free submission and a free publication route. People direct Agentic-Powered-Research, choose questions worth investigating, and assess whether the work is ready for a particular venue.
 
-Open [the searchable directory](index.html), [browse the verified free lists by subfield](DIRECTORY.md), or download [CSV](data/venues.csv) and [JSON](data/venues.json). The HTML file works locally without a server or a network connection; external source links require access to the web.
+Open [the online searchable directory](https://open-source-research-initiative.github.io/venues/), [browse the verified free lists by subfield](DIRECTORY.md), or download [CSV](data/venues.csv) and [JSON](data/venues.json). The [standalone HTML file](index.html) also works locally without a server or a network connection; external source links require access to the web.
 
 Choose a subfield and compare the recorded route, accepted contribution types, editorial demands, and source-linked metrics. Verified free routes are shown by default. Conditional waivers or funding agreements, incompletely verified leads, and paid exclusions have separate filters. Closed submissions are excluded from the default view. Preprints and repositories are available when the peer-reviewed-only filter is cleared.
 
@@ -33,4 +33,6 @@ The canonical files are [venues.json](data/venues.json) for deduplicated venues 
 
 To add or correct a venue, retain the official policy URL, access date and limitations, article-type conditions, all mandatory costs, and the source for peer-review status. Keep metrics with their exact year or period and denominator. Record unavailable evidence and material policy changes. Use [CONTRIBUTING.md](CONTRIBUTING.md) for the review workflow.
 
-This repository is prepared locally. Public GitHub publication and integration into OSRI's website require a separate publication action. Original guides and catalog compilations use CC BY 4.0; original code uses MIT. [Third-party terms remain separate](LICENSE.md).
+The [OSRI website](https://open-source-research-initiative.github.io/venues/) publishes a snapshot pinned to this repository's source commit. After reviewing and committing a directory update, export it to an OSRI hub checkout with `python3 scripts/export_hub.py /path/to/osri`; publish the hub change through its review and deployment workflow. The catalog checks run on pushes and pull requests here.
+
+Original guides and catalog compilations use CC BY 4.0; original code uses MIT. [Third-party terms remain separate](LICENSE.md).

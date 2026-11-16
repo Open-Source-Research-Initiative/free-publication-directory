@@ -22,6 +22,7 @@ def export(hub):
     text += '\nThis is a generated snapshot of the OSRI free-publication directory. The [snapshot manifest](snapshot.json) and [evidence receipt](build-receipt.json) preserve its source hashes. [Download the venue CSV](venues.csv), [inspect JSON](venues.json), or read the [agent findings and excluded leads](RESEARCH_NOTES.md).\n'
     (target / 'README.md').write_text(text)
     shutil.copy2(ROOT / 'docs/methodology.md', target / 'methodology.md')
+    shutil.copy2(ROOT / 'index.html', target / 'browser.html')
     shutil.copytree(ROOT / 'docs/subfields', target / 'subfields', dirs_exist_ok=True)
     for source in ['data/venues.csv', 'data/venues.json', 'data/build-receipt.json', 'data/validation.json']:
         shutil.copy2(ROOT / source, target / Path(source).name)
