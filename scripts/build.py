@@ -319,7 +319,15 @@ def recommended_before_quality(v):
 
 
 def recommended(v):
-    return recommended_before_quality(v) and v.get('quality', {}).get('status') != 'concerns'
+    return recommended_before_quality(v) and v.get('quality', {}).get('status') == 'supported'
+
+
+def display_views(venues):
+    return {
+        'documented': [v['id'] for v in venues if recommended(v)],
+        'incomplete': [v['id'] for v in venues if recommended_before_quality(v) and v.get('quality', {}).get('status') in {'supported', 'needs_verification'}],
+        'all': [v['id'] for v in venues],
+    }
 
 
 def build(allow_incomplete=False):
@@ -329,6 +337,7 @@ def build(allow_incomplete=False):
     excluded = [{'id': v['id'], 'name': v['name'], 'reasons': exclusion_reasons(v), 'source_record_ids': v['source_record_ids'], 'source_files': v['source_files']} for v in candidates if exclusion_reasons(v)]
     summary = {'checked_on':'2026-11-16', 'subfields':len(subfields), 'agent_role_files':sum(x['role'] in ROLES for x in receipt), 'source_listings':len(memberships), 'unique_candidates':len(candidates), 'unique_venues':len(venues), 'excluded_candidates':len(excluded), 'eligibility_counts':dict(Counter(v['route']['eligibility'] for v in venues)), 'kind_counts':dict(Counter(v['kind'] for v in venues)), 'verified_free_peer_reviewed_open_for_consideration':sum(recommended(v) for v in venues), 'venues_with_metrics':sum(any(m['value'] is not None for m in v['metrics']) for v in venues), 'missing_role_files':missing, 'cross_subfield_fee_conflicts':conflicts}
     summary['verified_free_peer_reviewed_before_quality'] = sum(recommended_before_quality(v) for v in venues)
+    summary['verified_free_core_documented'] = sum(recommended(v) for v in venues)
     followup_inputs = [x for x in receipt if x['role'].startswith('fee_followup_')]
     if followup_inputs:
         manifest = read(ROOT / 'research/campaigns/2026-11-16-cost-followup/campaign.json')
@@ -368,7 +377,7 @@ def build(allow_incomplete=False):
             doc = read(ROOT / entry['path'])
             assignments.append({'subfield':entry['subfield'], 'role':entry['role'], 'task_name':doc['agent_task'], 'evidence_file':entry['path'], 'evidence_file_present':True})
     for name, value in [('venues',venues),('candidates',candidates),('excluded-venues',excluded),('memberships',memberships),('coverage',coverage),('agent-assignments',assignments)]: write(out / 'data' / (name + '.json'), value)
-    sources = ['scripts/build.py','scripts/fee_followup.py','scripts/quality_followup.py','scripts/directory.html','data/subfields.json']
+    sources = ['scripts/build.py','scripts/fee_followup.py','scripts/quality_followup.py','scripts/directory.html','scripts/directory-fragment.html','scripts/directory.css','scripts/directory.js','docs/display-policy.md','data/subfields.json']
     write(out / 'data/build-receipt.json', {'summary':summary,'inputs':receipt,'build_sources':[{'path':p,'sha256':hashlib.sha256((ROOT / p).read_bytes()).hexdigest()} for p in sources], 'preview':allow_incomplete})
     columns = ['id','name','kind','publisher','homepage','author_guidelines','submission_url','subfields','subjects','formats','scope_by_subfield','eligibility','route_model','submission_fee','publication_fee','oa_status','other_mandatory_costs','review_type','review_sources','submission_status','conditions','geography','ai_policy','quality','metrics','fee_evidence','source_record_ids','source_files']
     with (out / 'data/venues.csv').open('w', newline='', encoding='utf-8') as h:
@@ -380,14 +389,14 @@ def build(allow_incomplete=False):
             w.writerow(row)
     docs = out / 'docs/subfields'
     docs.mkdir(parents=True, exist_ok=True)
-    index = ['# Default recommended publication routes', '', 'Checked November 16, 2026. These default recommendations meet the campaign AI workflow and verified author-cost criteria, are peer reviewed, and have no documented medium or high quality concerns. [Methodology](docs/methodology.md).', '']
-    coverage_lines = ['# Coverage', '', 'Subfield totals overlap. The main directory includes only AI-compatible, non-paid-only venues with submissions not known closed or paused.', '', '| Subfield | AI-compatible venues | Default recommendations | With reported metrics |', '| --- | ---: | ---: | ---: |']
+    index = ['# Free routes with core standards documented', '', 'Checked November 16, 2026. These routes meet the campaign AI workflow and verified author-cost criteria, are peer reviewed, and have core editorial standards documented. [Display policy](docs/display-policy.md) · [Methodology](docs/methodology.md).', '']
+    coverage_lines = ['# Coverage', '', 'Subfield totals overlap. The main directory includes only AI-compatible, non-paid-only venues with submissions not known closed or paused.', '', '| Subfield | AI-compatible venues | Free + core documented | With reported metrics |', '| --- | ---: | ---: | ---: |']
     for field, cov in zip(subfields, coverage):
         fid = field['id']
         selected = [v for v in venues if fid in v['subfields'] and recommended(v)]
-        index.append(f'- [{field["name"]}](docs/subfields/{fid}.md) — {len(selected)} default recommended routes')
+        index.append(f'- [{field["name"]}](docs/subfields/{fid}.md) — {len(selected)} free routes with core standards documented')
         coverage_lines.append(f'| [{field["name"]}](docs/subfields/{fid}.md) | {cov["unique_venues"]} | {cov["verified_free_peer_reviewed"]} | {cov["venues_with_reported_metrics"]} |')
-        lines = [f'# {field["name"]}', '', 'Default recommended free peer-reviewed routes with a compatible AI policy and no documented medium or high quality concerns. Check current author instructions before submission.', '']
+        lines = [f'# {field["name"]}', '', 'Free peer-reviewed routes with a compatible AI policy and core editorial standards documented. Check current author instructions before submission.', '']
         for v in selected:
             route = v['route']
             ai = v['ai_policy']
@@ -421,7 +430,7 @@ def build(allow_incomplete=False):
                 if m['value'] is not None: evidence_lines.append(f'- [{m["name"]}]({m["source_url"]}): {m["value"]}; period: {m.get("year") or "not reported"}; population: {m.get("population") or "not reported"}. {m.get("note", "")}')
             lines.extend(dict.fromkeys(evidence_lines))
             lines.append('')
-        if not selected: lines.append('No route has cleared all recommendation checks for this subfield.')
+        if not selected: lines.append('No route currently meets both the free-author-cost and documented-core-standards checks for this subfield.')
         (docs / (fid + '.md')).write_text('\n'.join(lines).rstrip()+'\n',encoding='utf-8')
     (out / 'DIRECTORY.md').write_text('\n'.join(index)+'\n',encoding='utf-8')
     (out / 'COVERAGE.md').write_text('\n'.join(coverage_lines)+'\n',encoding='utf-8')
@@ -434,8 +443,14 @@ def build(allow_incomplete=False):
             if value: notes += [value if isinstance(value, str) else '```json\n' + json.dumps(value, ensure_ascii=False, indent=2) + '\n```', '']
     (out / 'RESEARCH_NOTES.md').write_text('\n'.join(notes)+'\n',encoding='utf-8')
     template = (ROOT / 'scripts/directory.html').read_text(encoding='utf-8')
-    payload = json.dumps({'subfields':subfields,'venues':venues,'summary':summary},ensure_ascii=False).replace('<','\\u003c').replace('&','\\u0026')
-    (out / 'index.html').write_text(template.replace('/*CATALOG_DATA*/null',payload),encoding='utf-8')
+    payload = json.dumps({'subfields':subfields,'venues':venues,'summary':summary,'views':display_views(venues)},ensure_ascii=False).replace('<','\\u003c').replace('&','\\u0026')
+    fragment = (ROOT / 'scripts/directory-fragment.html').read_text().replace('/*CATALOG_DATA*/', payload)
+    css = (ROOT / 'scripts/directory.css').read_text()
+    js = (ROOT / 'scripts/directory.js').read_text()
+    (out / 'browser-fragment.html').write_text(fragment, encoding='utf-8')
+    (out / 'directory.css').write_text(css, encoding='utf-8')
+    (out / 'directory.js').write_text(js, encoding='utf-8')
+    (out / 'index.html').write_text(template.replace('/*DIRECTORY_CSS*/',css).replace('/*DIRECTORY_FRAGMENT*/',fragment).replace('/*DIRECTORY_JS*/',js),encoding='utf-8')
     print(json.dumps(summary, indent=2))
 
 

@@ -5,7 +5,7 @@ import hashlib
 import json
 import re
 from urllib.parse import urlsplit
-from build import ROOT, ROLES, consolidate, exclusion_reasons, load_memberships, recommended, validate_record
+from build import ROOT, ROLES, consolidate, exclusion_reasons, load_memberships, recommended, validate_record, display_views
 
 
 def check():
@@ -42,9 +42,12 @@ def check():
         assert json.loads(row['fee_evidence']) == venue['route'].get('fee_evidence', [])
         assert json.loads(row['review_sources']) == venue['review'].get('source_urls', [])
     text = (ROOT / 'index.html').read_text(encoding='utf-8')
-    assert '/*CATALOG_DATA*/null' not in text
-    payload = json.dumps({'subfields':subfields,'venues':venues,'summary':receipt['summary']},ensure_ascii=False).replace('<','\\u003c').replace('&','\\u0026')
+    assert '/*CATALOG_DATA*/' not in text
+    payload = json.dumps({'subfields':subfields,'venues':venues,'summary':receipt['summary'],'views':display_views(venues)},ensure_ascii=False).replace('<','\\u003c').replace('&','\\u0026')
     assert payload in text, 'Browser catalog stale'
+    assert (ROOT / 'browser-fragment.html').read_text() == (ROOT / 'scripts/directory-fragment.html').read_text().replace('/*CATALOG_DATA*/', payload)
+    for asset in ('directory.css','directory.js'):
+        assert (ROOT / asset).read_bytes() == (ROOT / 'scripts' / asset).read_bytes(), f'{asset} stale'
     for v in candidates:
         assert 'difficulty' not in v and 'difficulty_by_subfield' not in v
         for value in [v['homepage'],v['author_guidelines']] + [e['url'] for e in v['route'].get('fee_evidence',[])] + [m['source_url'] for m in v['metrics']]:
