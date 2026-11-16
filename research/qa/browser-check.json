@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "default_results": 112,
+  "total_venues": 169,
+  "subfields_checked": 12,
+  "closed_venues_checked": 1,
+  "catalog_sha256": "71f8e0f111c838080f52f1d0787763c2dd5aecdfbee91bd407bd6d774c4eb6d8",
+  "html_sha256": "0276a5c07cf5906d0026fafdd794945bfde0d087e635d74db638ec2d9202abb5",
+  "checks": [
+    "default cost/review/availability gate",
+    "expandable fee evidence",
+    "cross-field ranking guard",
+    "all subfield filter counts",
+    "empty state",
+    "reset",
+    "all statuses and dissemination kinds",
+    "known closed labels",
+    "desktop rendering",
+    "mobile filtering and overflow",
+    "no browser script errors"
+  ],
+  "browser": "Playwright Chromium from existing installation; no Browser/IAB tool is available in this session",
+  "viewports": [
+    "1440x1100",
+    "390x844"
+  ]
+}

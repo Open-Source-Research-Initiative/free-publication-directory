@@ -1,0 +1,130 @@
+{
+  "checked_on": "2026-11-16",
+  "subfields": 12,
+  "agent_role_files": 60,
+  "source_listings": 173,
+  "unique_venues": 169,
+  "eligibility_counts": {
+    "needs_verification": 51,
+    "verified_free": 114,
+    "conditional": 4
+  },
+  "kind_counts": {
+    "journal": 168,
+    "preprint_server": 1
+  },
+  "verified_free_peer_reviewed_open_for_consideration": 112,
+  "venues_with_metrics": 107,
+  "missing_role_files": [],
+  "cross_subfield_fee_conflicts": [],
+  "coverage": [
+    {
+      "subfield": "public-health",
+      "name": "Public health and population research",
+      "source_listings": 14,
+      "unique_venues": 14,
+      "verified_free_peer_reviewed": 12,
+      "verified_free_with_difficulty_band": 4,
+      "venues_with_reported_metrics": 8
+    },
+    {
+      "subfield": "health-systems",
+      "name": "Health systems, services and health informatics",
+      "source_listings": 14,
+      "unique_venues": 14,
+      "verified_free_peer_reviewed": 10,
+      "verified_free_with_difficulty_band": 0,
+      "venues_with_reported_metrics": 5
+    },
+    {
+      "subfield": "systems-engineering",
+      "name": "Systems engineering, reliability and engineering management",
+      "source_listings": 13,
+      "unique_venues": 13,
+      "verified_free_peer_reviewed": 4,
+      "verified_free_with_difficulty_band": 0,
+      "venues_with_reported_metrics": 12
+    },
+    {
+      "subfield": "operations-simulation",
+      "name": "Operations research, decision science and simulation",
+      "source_listings": 15,
+      "unique_venues": 15,
+      "verified_free_peer_reviewed": 8,
+      "verified_free_with_difficulty_band": 2,
+      "venues_with_reported_metrics": 13
+    },
+    {
+      "subfield": "informatics-computing",
+      "name": "Computer science, AI, data and research software",
+      "source_listings": 16,
+      "unique_venues": 16,
+      "verified_free_peer_reviewed": 14,
+      "verified_free_with_difficulty_band": 4,
+      "venues_with_reported_metrics": 4
+    },
+    {
+      "subfield": "computational-biology",
+      "name": "Bioinformatics and computational biology",
+      "source_listings": 15,
+      "unique_venues": 15,
+      "verified_free_peer_reviewed": 5,
+      "verified_free_with_difficulty_band": 0,
+      "venues_with_reported_metrics": 11
+    },
+    {
+      "subfield": "computational-physical-sciences",
+      "name": "Computational physics, chemistry and materials",
+      "source_listings": 15,
+      "unique_venues": 15,
+      "verified_free_peer_reviewed": 10,
+      "verified_free_with_difficulty_band": 0,
+      "venues_with_reported_metrics": 14
+    },
+    {
+      "subfield": "economics",
+      "name": "Economics, econometrics and research economics",
+      "source_listings": 14,
+      "unique_venues": 14,
+      "verified_free_peer_reviewed": 10,
+      "verified_free_with_difficulty_band": 1,
+      "venues_with_reported_metrics": 6
+    },
+    {
+      "subfield": "psychology-behavior",
+      "name": "Psychology, judgment and behavioral science",
+      "source_listings": 15,
+      "unique_venues": 15,
+      "verified_free_peer_reviewed": 12,
+      "verified_free_with_difficulty_band": 5,
+      "venues_with_reported_metrics": 10
+    },
+    {
+      "subfield": "sociology-organizations",
+      "name": "Sociology, organizations and collaboration",
+      "source_listings": 15,
+      "unique_venues": 15,
+      "verified_free_peer_reviewed": 13,
+      "verified_free_with_difficulty_band": 0,
+      "venues_with_reported_metrics": 6
+    },
+    {
+      "subfield": "public-policy",
+      "name": "Public policy, governance and administration",
+      "source_listings": 14,
+      "unique_venues": 14,
+      "verified_free_peer_reviewed": 10,
+      "verified_free_with_difficulty_band": 7,
+      "venues_with_reported_metrics": 10
+    },
+    {
+      "subfield": "meta-research",
+      "name": "Meta-research, evidence synthesis and scholarly communication",
+      "source_listings": 13,
+      "unique_venues": 13,
+      "verified_free_peer_reviewed": 7,
+      "verified_free_with_difficulty_band": 3,
+      "venues_with_reported_metrics": 10
+    }
+  ]
+}

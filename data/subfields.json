@@ -1,0 +1,14 @@
+[
+  {"id":"public-health","name":"Public health and population research","area":"Healthcare"},
+  {"id":"health-systems","name":"Health systems, services and health informatics","area":"Healthcare"},
+  {"id":"systems-engineering","name":"Systems engineering, reliability and engineering management","area":"Engineering"},
+  {"id":"operations-simulation","name":"Operations research, decision science and simulation","area":"Engineering"},
+  {"id":"informatics-computing","name":"Computer science, AI, data and research software","area":"Informatics"},
+  {"id":"computational-biology","name":"Bioinformatics and computational biology","area":"Informatics"},
+  {"id":"computational-physical-sciences","name":"Computational physics, chemistry and materials","area":"Informatics"},
+  {"id":"economics","name":"Economics, econometrics and research economics","area":"Economics"},
+  {"id":"psychology-behavior","name":"Psychology, judgment and behavioral science","area":"Social and Behavioral Sciences"},
+  {"id":"sociology-organizations","name":"Sociology, organizations and collaboration","area":"Social and Behavioral Sciences"},
+  {"id":"public-policy","name":"Public policy, governance and administration","area":"Public Policy"},
+  {"id":"meta-research","name":"Meta-research, evidence synthesis and scholarly communication","area":"Cross-cutting"}
+]
