@@ -229,6 +229,8 @@ def load_memberships(allow_incomplete=False):
         include(adjudications, 'adjudication')
     from fee_followup import apply as apply_fee_followup
     apply_fee_followup(ROOT, memberships, receipt, missing, allow_incomplete, read, consolidate, ai_compatible, url)
+    from quality_followup import apply as apply_quality_followup
+    apply_quality_followup(ROOT, memberships, receipt, missing, allow_incomplete, read, consolidate, exclusion_reasons, url)
     for record in memberships:
         validate_record(record)
     tasks = [x['task_name'] for x in assignments]
@@ -312,8 +314,12 @@ def consolidate(memberships):
     return sorted(venues, key=lambda x: x['name'].casefold()), conflicts
 
 
-def recommended(v):
+def recommended_before_quality(v):
     return (not exclusion_reasons(v) and v['route']['eligibility'] == 'verified_free' and v['route']['submission_fee'] == v['route']['publication_fee'] == 'none' and v['review']['type'] == 'peer_reviewed')
+
+
+def recommended(v):
+    return recommended_before_quality(v) and v.get('quality', {}).get('status') != 'concerns'
 
 
 def build(allow_incomplete=False):
@@ -322,6 +328,7 @@ def build(allow_incomplete=False):
     venues = [v for v in candidates if not exclusion_reasons(v)]
     excluded = [{'id': v['id'], 'name': v['name'], 'reasons': exclusion_reasons(v), 'source_record_ids': v['source_record_ids'], 'source_files': v['source_files']} for v in candidates if exclusion_reasons(v)]
     summary = {'checked_on':'2026-11-16', 'subfields':len(subfields), 'agent_role_files':sum(x['role'] in ROLES for x in receipt), 'source_listings':len(memberships), 'unique_candidates':len(candidates), 'unique_venues':len(venues), 'excluded_candidates':len(excluded), 'eligibility_counts':dict(Counter(v['route']['eligibility'] for v in venues)), 'kind_counts':dict(Counter(v['kind'] for v in venues)), 'verified_free_peer_reviewed_open_for_consideration':sum(recommended(v) for v in venues), 'venues_with_metrics':sum(any(m['value'] is not None for m in v['metrics']) for v in venues), 'missing_role_files':missing, 'cross_subfield_fee_conflicts':conflicts}
+    summary['verified_free_peer_reviewed_before_quality'] = sum(recommended_before_quality(v) for v in venues)
     followup_inputs = [x for x in receipt if x['role'].startswith('fee_followup_')]
     if followup_inputs:
         manifest = read(ROOT / 'research/campaigns/2026-11-16-cost-followup/campaign.json')
@@ -329,10 +336,25 @@ def build(allow_incomplete=False):
         summary['fee_followup'] = {
             'target_count': len(followup_ids),
             'baseline_recommended_count': manifest['baseline_recommended_count'],
-            'current_recommended_count': sum(recommended(v) for v in venues),
+            'current_recommended_count': sum(recommended_before_quality(v) for v in venues),
             'target_verified_free_count': sum(v['route']['eligibility'] == 'verified_free' for v in candidates if v['id'] in followup_ids),
             'complete': not any('2026-11-16-cost-followup/' in path for path in missing),
             'tasks': [{'role': x['role'], 'task_name': read(ROOT / x['path'])['agent_task'], 'evidence_file': x['path']} for x in followup_inputs if x['role'] in {'fee_followup_audit', 'fee_followup_review'}],
+        }
+    quality_inputs = [x for x in receipt if x['role'].startswith('quality_')]
+    if quality_inputs:
+        quality_venues = [v for v in venues if 'quality' in v]
+        summary['quality_review'] = {
+            'target_count': 146,
+            'complete': not any('2026-11-16-quality/' in path for path in missing),
+            'status_counts': {status: sum(v['quality']['status'] == status for v in quality_venues) for status in ('supported', 'needs_verification', 'concerns')},
+            'registry_confirmed_venues': sum(any(i['verification'] == 'registry_confirmed' for i in v['quality']['indexing']) for v in quality_venues),
+            'publisher_claim_only_venues': sum(any(i['verification'] == 'publisher_claim_only' for i in v['quality']['indexing']) for v in quality_venues),
+            'documented_concern_venues': sum(v['quality']['status'] == 'concerns' for v in quality_venues),
+            'supplemental_task_count': len({read(ROOT / x['path'])['agent_task'] for x in quality_inputs if x['role'] in {'quality_completion', 'quality_registry', 'quality_supplemental_review'} and read(ROOT / x['path'])['agent_task'] != '/root'}),
+            'supplemental_tasks': [{'role': x['role'], 'task_name': read(ROOT / x['path'])['agent_task'], 'evidence_file': x['path']} for x in quality_inputs if x['role'] in {'quality_completion', 'quality_registry', 'quality_supplemental_review'} and read(ROOT / x['path'])['agent_task'] != '/root'],
+            'primary_supplemental_files': [x['path'] for x in quality_inputs if x['role'] in {'quality_completion', 'quality_registry', 'quality_supplemental_review'} and read(ROOT / x['path'])['agent_task'] == '/root'],
+            'tasks': [{'role': x['role'], 'task_name': read(ROOT / x['path'])['agent_task'], 'evidence_file': x['path']} for x in quality_inputs if x['role'] in {'quality_audit', 'quality_review'}],
         }
     coverage = []
     for f in subfields:
@@ -346,26 +368,26 @@ def build(allow_incomplete=False):
             doc = read(ROOT / entry['path'])
             assignments.append({'subfield':entry['subfield'], 'role':entry['role'], 'task_name':doc['agent_task'], 'evidence_file':entry['path'], 'evidence_file_present':True})
     for name, value in [('venues',venues),('candidates',candidates),('excluded-venues',excluded),('memberships',memberships),('coverage',coverage),('agent-assignments',assignments)]: write(out / 'data' / (name + '.json'), value)
-    sources = ['scripts/build.py','scripts/fee_followup.py','scripts/directory.html','data/subfields.json']
+    sources = ['scripts/build.py','scripts/fee_followup.py','scripts/quality_followup.py','scripts/directory.html','data/subfields.json']
     write(out / 'data/build-receipt.json', {'summary':summary,'inputs':receipt,'build_sources':[{'path':p,'sha256':hashlib.sha256((ROOT / p).read_bytes()).hexdigest()} for p in sources], 'preview':allow_incomplete})
-    columns = ['id','name','kind','publisher','homepage','author_guidelines','submission_url','subfields','subjects','formats','scope_by_subfield','eligibility','route_model','submission_fee','publication_fee','oa_status','other_mandatory_costs','review_type','review_sources','submission_status','conditions','geography','ai_policy','metrics','fee_evidence','source_record_ids','source_files']
+    columns = ['id','name','kind','publisher','homepage','author_guidelines','submission_url','subfields','subjects','formats','scope_by_subfield','eligibility','route_model','submission_fee','publication_fee','oa_status','other_mandatory_costs','review_type','review_sources','submission_status','conditions','geography','ai_policy','quality','metrics','fee_evidence','source_record_ids','source_files']
     with (out / 'data/venues.csv').open('w', newline='', encoding='utf-8') as h:
         w = csv.DictWriter(h, columns, lineterminator='\n'); w.writeheader()
         for v in venues:
             route=v['route']; row={k:v.get(k,'') for k in columns}
             row.update(eligibility=route['eligibility'],route_model=route['model'],submission_fee=route['submission_fee'],publication_fee=route['publication_fee'],conditions=route.get('conditions',''),oa_status=route.get('oa_status',''),other_mandatory_costs=route.get('other_mandatory_costs',''),review_type=v['review']['type'],review_sources=v['review'].get('source_urls',[]),fee_evidence=route.get('fee_evidence',[]))
-            for key in ('subfields','subjects','formats','scope_by_subfield','geography','ai_policy','metrics','fee_evidence','review_sources','source_record_ids','source_files'): row[key]=json.dumps(row[key],ensure_ascii=False)
+            for key in ('subfields','subjects','formats','scope_by_subfield','geography','ai_policy','quality','metrics','fee_evidence','review_sources','source_record_ids','source_files'): row[key]=json.dumps(row[key],ensure_ascii=False)
             w.writerow(row)
     docs = out / 'docs/subfields'
     docs.mkdir(parents=True, exist_ok=True)
-    index = ['# Verified free peer-reviewed publication routes', '', 'Checked November 16, 2026. These routes meet the campaign AI workflow and verified author-cost criteria. [Methodology](docs/methodology.md).', '']
-    coverage_lines = ['# Coverage', '', 'Subfield totals overlap. The main directory includes only AI-compatible, non-paid-only venues with submissions not known closed or paused.', '', '| Subfield | AI-compatible venues | Verified free peer-reviewed | With reported metrics |', '| --- | ---: | ---: | ---: |']
+    index = ['# Default recommended publication routes', '', 'Checked November 16, 2026. These default recommendations meet the campaign AI workflow and verified author-cost criteria, are peer reviewed, and have no documented medium or high quality concerns. [Methodology](docs/methodology.md).', '']
+    coverage_lines = ['# Coverage', '', 'Subfield totals overlap. The main directory includes only AI-compatible, non-paid-only venues with submissions not known closed or paused.', '', '| Subfield | AI-compatible venues | Default recommendations | With reported metrics |', '| --- | ---: | ---: | ---: |']
     for field, cov in zip(subfields, coverage):
         fid = field['id']
         selected = [v for v in venues if fid in v['subfields'] and recommended(v)]
-        index.append(f'- [{field["name"]}](docs/subfields/{fid}.md) — {len(selected)} verified free peer-reviewed routes')
+        index.append(f'- [{field["name"]}](docs/subfields/{fid}.md) — {len(selected)} default recommended routes')
         coverage_lines.append(f'| [{field["name"]}](docs/subfields/{fid}.md) | {cov["unique_venues"]} | {cov["verified_free_peer_reviewed"]} | {cov["venues_with_reported_metrics"]} |')
-        lines = [f'# {field["name"]}', '', 'Verified free peer-reviewed routes with a compatible AI policy. Check current author instructions before submission.', '']
+        lines = [f'# {field["name"]}', '', 'Default recommended free peer-reviewed routes with a compatible AI policy and no documented medium or high quality concerns. Check current author instructions before submission.', '']
         for v in selected:
             route = v['route']
             ai = v['ai_policy']
@@ -377,6 +399,13 @@ def build(allow_incomplete=False):
                       f'**AI policy:** {ai.get("summary", "")}', '',
                       f'**Disclosure ({disclosure["status"]}):** {disclosure["instructions"]}', '',
                       f'[Author guidance]({v["author_guidelines"]}) · [Venue]({v["homepage"]})', '']
+            quality = v.get('quality')
+            if quality:
+                lines += [f'**Quality evidence ({quality["status"]}):** {quality["summary"]}', '']
+                for item in quality['indexing']:
+                    links = ', '.join(f'[source]({u})' for u in item['source_urls'])
+                    lines.append(f'- {item["name"]}: {item["verification"].replace("_", " ")} — {item["note"]} {links}'.rstrip())
+                lines.append('')
             evidence_lines = []
             for key, label in (('venue_countries', 'Venue base'), ('publisher_countries', 'Publisher base')):
                 for country in geo.get(key, []):

@@ -21,6 +21,7 @@ jobs:
       - name: Rebuild and check research evidence and exports
         run: |
           python scripts/test_fee_followup.py
+          python scripts/test_quality_followup.py
           python scripts/build.py
           python scripts/check.py
           git diff --exit-code

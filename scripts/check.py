@@ -35,7 +35,7 @@ def check():
         rows = list(csv.DictReader(h))
     assert [r['id'] for r in rows] == [v['id'] for v in venues]
     for row, venue in zip(rows, venues):
-        for key in ('subfields','subjects','formats','scope_by_subfield','geography','ai_policy','metrics','source_record_ids','source_files'):
+        for key in ('subfields','subjects','formats','scope_by_subfield','geography','ai_policy','quality','metrics','source_record_ids','source_files'):
             assert json.loads(row[key]) == venue.get(key, ''), f'CSV mismatch: {venue["id"]} {key}'
         for key in ('submission_fee', 'publication_fee', 'conditions', 'eligibility'):
             assert row[key] == venue['route'].get(key, ''), f'CSV mismatch: {venue["id"]} {key}'
