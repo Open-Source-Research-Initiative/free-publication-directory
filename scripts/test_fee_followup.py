@@ -14,7 +14,7 @@ from fee_followup import apply, CAMPAIGN
 class FollowupTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with patch("fee_followup.apply"):
+        with patch("fee_followup.apply"), patch("quality_followup.apply"):
             cls.memberships = build.load_memberships(True)[1]
         cls.source = build.ROOT / CAMPAIGN
     def setUp(self):

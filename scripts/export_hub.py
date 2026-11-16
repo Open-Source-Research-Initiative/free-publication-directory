@@ -25,10 +25,15 @@ def export(hub):
         text += '\nThe [author-cost follow-up](cost-verification.md) records the audit of 74 previously unresolved venues and the four additions to the verified free list.\n'
         report = cost_report.read_text().replace('../research/', 'research/').replace('../data/build-receipt.json', 'build-receipt.json')
         (target / 'cost-verification.md').write_text(report)
+    quality_report = ROOT / 'docs/quality-review.md'
+    if quality_report.exists():
+        text += '\nThe [quality evidence review](quality-review.md) describes the indexing and editorial standards audit.\n'
+        report = quality_report.read_text().replace('../research/', 'research/').replace('../data/build-receipt.json', 'build-receipt.json')
+        (target / 'quality-review.md').write_text(report)
     (target / 'README.md').write_text(text)
     shutil.copy2(ROOT / 'docs/methodology.md', target / 'methodology.md')
     browser = (ROOT / 'index.html').read_text(encoding='utf-8')
-    for old, new in [('href="DIRECTORY.md"', 'href="README.md"'), ('href="docs/methodology.md"', 'href="methodology.md"'), ('href="data/venues.csv"', 'href="venues.csv"'), ('href="data/venues.json"', 'href="venues.json"')]:
+    for old, new in [('href="DIRECTORY.md"', 'href="README.md"'), ('href="docs/quality-review.md"', 'href="quality-review.md"'), ('href="docs/methodology.md"', 'href="methodology.md"'), ('href="data/venues.csv"', 'href="venues.csv"'), ('href="data/venues.json"', 'href="venues.json"')]:
         browser = browser.replace(old, new)
     (target / 'browser.html').write_text(browser, encoding='utf-8')
     shutil.copy2(ROOT / 'LICENSE.md', target / 'LICENSE.md')

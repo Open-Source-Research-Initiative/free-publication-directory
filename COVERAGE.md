@@ -2,7 +2,7 @@
 
 Subfield totals overlap. The main directory includes only AI-compatible, non-paid-only venues with submissions not known closed or paused.
 
-| Subfield | AI-compatible venues | Verified free peer-reviewed | With reported metrics |
+| Subfield | AI-compatible venues | Default recommendations | With reported metrics |
 | --- | ---: | ---: | ---: |
 | [Public health and population research](docs/subfields/public-health.md) | 8 | 8 | 2 |
 | [Health systems, services and health informatics](docs/subfields/health-systems.md) | 7 | 5 | 2 |
@@ -21,7 +21,7 @@ Subfield totals overlap. The main directory includes only AI-compatible, non-pai
 | [Health economics and economic evaluation](docs/subfields/health-economics.md) | 5 | 0 | 5 |
 | [Software engineering and formal methods](docs/subfields/software-engineering.md) | 1 | 1 | 0 |
 | [Cybersecurity, privacy and digital trust](docs/subfields/cybersecurity-privacy.md) | 1 | 1 | 0 |
-| [Human-computer interaction and human factors](docs/subfields/human-computer-interaction.md) | 2 | 2 | 0 |
+| [Human-computer interaction and human factors](docs/subfields/human-computer-interaction.md) | 2 | 1 | 0 |
 | [Robotics, control and autonomous systems](docs/subfields/robotics-control.md) | 7 | 1 | 7 |
 | [Energy systems and environmental engineering](docs/subfields/energy-environmental-engineering.md) | 1 | 1 | 0 |
 | [Statistics, probability and applied mathematics](docs/subfields/statistics-applied-mathematics.md) | 1 | 0 | 0 |
