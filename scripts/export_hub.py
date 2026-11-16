@@ -20,6 +20,11 @@ def export(hub):
     target.mkdir(exist_ok=True)
     text = (ROOT / 'DIRECTORY.md').read_text().replace('docs/subfields/', 'subfields/').replace('docs/methodology.md', 'methodology.md')
     text += '\nThis is a generated snapshot of the OSRI free-publication directory. The [snapshot manifest](snapshot.json) and [evidence receipt](build-receipt.json) preserve its source hashes. [Download the venue CSV](venues.csv), [inspect JSON](venues.json), review [all audited candidates](candidates.json) and [exclusions](excluded-venues.json), or read the [agent findings](RESEARCH_NOTES.md).\n'
+    cost_report = ROOT / 'docs/cost-verification.md'
+    if cost_report.exists():
+        text += '\nThe [author-cost follow-up](cost-verification.md) records the audit of 74 previously unresolved venues and the four additions to the verified free list.\n'
+        report = cost_report.read_text().replace('../research/', 'research/').replace('../data/build-receipt.json', 'build-receipt.json')
+        (target / 'cost-verification.md').write_text(report)
     (target / 'README.md').write_text(text)
     shutil.copy2(ROOT / 'docs/methodology.md', target / 'methodology.md')
     browser = (ROOT / 'index.html').read_text(encoding='utf-8')
