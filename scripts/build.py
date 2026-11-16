@@ -227,6 +227,8 @@ def load_memberships(allow_incomplete=False):
             matches[0].update(copy.deepcopy(changes))
             matches[0]['source_files'].append(str(adjudications.relative_to(ROOT)))
         include(adjudications, 'adjudication')
+    from fee_followup import apply as apply_fee_followup
+    apply_fee_followup(ROOT, memberships, receipt, missing, allow_incomplete, read, consolidate, ai_compatible, url)
     for record in memberships:
         validate_record(record)
     tasks = [x['task_name'] for x in assignments]
@@ -320,6 +322,18 @@ def build(allow_incomplete=False):
     venues = [v for v in candidates if not exclusion_reasons(v)]
     excluded = [{'id': v['id'], 'name': v['name'], 'reasons': exclusion_reasons(v), 'source_record_ids': v['source_record_ids'], 'source_files': v['source_files']} for v in candidates if exclusion_reasons(v)]
     summary = {'checked_on':'2026-11-16', 'subfields':len(subfields), 'agent_role_files':sum(x['role'] in ROLES for x in receipt), 'source_listings':len(memberships), 'unique_candidates':len(candidates), 'unique_venues':len(venues), 'excluded_candidates':len(excluded), 'eligibility_counts':dict(Counter(v['route']['eligibility'] for v in venues)), 'kind_counts':dict(Counter(v['kind'] for v in venues)), 'verified_free_peer_reviewed_open_for_consideration':sum(recommended(v) for v in venues), 'venues_with_metrics':sum(any(m['value'] is not None for m in v['metrics']) for v in venues), 'missing_role_files':missing, 'cross_subfield_fee_conflicts':conflicts}
+    followup_inputs = [x for x in receipt if x['role'].startswith('fee_followup_')]
+    if followup_inputs:
+        manifest = read(ROOT / 'research/campaigns/2026-11-16-cost-followup/campaign.json')
+        followup_ids = {ident for group in manifest['batches'].values() for ident in group}
+        summary['fee_followup'] = {
+            'target_count': len(followup_ids),
+            'baseline_recommended_count': manifest['baseline_recommended_count'],
+            'current_recommended_count': sum(recommended(v) for v in venues),
+            'target_verified_free_count': sum(v['route']['eligibility'] == 'verified_free' for v in candidates if v['id'] in followup_ids),
+            'complete': not any('2026-11-16-cost-followup/' in path for path in missing),
+            'tasks': [{'role': x['role'], 'task_name': read(ROOT / x['path'])['agent_task'], 'evidence_file': x['path']} for x in followup_inputs if x['role'] in {'fee_followup_audit', 'fee_followup_review'}],
+        }
     coverage = []
     for f in subfields:
         selected = [v for v in venues if f['id'] in v['subfields']]
@@ -332,7 +346,7 @@ def build(allow_incomplete=False):
             doc = read(ROOT / entry['path'])
             assignments.append({'subfield':entry['subfield'], 'role':entry['role'], 'task_name':doc['agent_task'], 'evidence_file':entry['path'], 'evidence_file_present':True})
     for name, value in [('venues',venues),('candidates',candidates),('excluded-venues',excluded),('memberships',memberships),('coverage',coverage),('agent-assignments',assignments)]: write(out / 'data' / (name + '.json'), value)
-    sources = ['scripts/build.py','scripts/directory.html','data/subfields.json']
+    sources = ['scripts/build.py','scripts/fee_followup.py','scripts/directory.html','data/subfields.json']
     write(out / 'data/build-receipt.json', {'summary':summary,'inputs':receipt,'build_sources':[{'path':p,'sha256':hashlib.sha256((ROOT / p).read_bytes()).hexdigest()} for p in sources], 'preview':allow_incomplete})
     columns = ['id','name','kind','publisher','homepage','author_guidelines','submission_url','subfields','subjects','formats','scope_by_subfield','eligibility','route_model','submission_fee','publication_fee','oa_status','other_mandatory_costs','review_type','review_sources','submission_status','conditions','geography','ai_policy','metrics','fee_evidence','source_record_ids','source_files']
     with (out / 'data/venues.csv').open('w', newline='', encoding='utf-8') as h:

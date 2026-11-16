@@ -10,6 +10,8 @@ Acceptance rates and citation metrics retain their reported names, periods, popu
 
 ## Coverage and maintenance
 
+The [author-cost follow-up](docs/cost-verification.md) rechecked all 74 previously unresolved AI-compatible venues. Four routes now qualify, bringing the verified free peer-reviewed list to 74; 70 remain cost-unverified. The new audit and independent review evidence is preserved alongside the original campaign.
+
 See [coverage](COVERAGE.md), [research notes](RESEARCH_NOTES.md), [assignments](data/agent-assignments.json), and the [build receipt](data/build-receipt.json). Agent evidence review is not independent human scientific review or venue endorsement. Initial healthcare work is nonclinical; new physical laboratory experiments are outside OSRI's initial scope.
 
 Use Python 3 to build and verify the directory:
