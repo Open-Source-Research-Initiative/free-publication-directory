@@ -6,7 +6,7 @@
   "total_venues": 146,
   "subfields_checked": 24,
   "catalog_sha256": "f7a789636be58f7aa965f4ea17fb7ff54ece0e9b0625e9fc6ad55113419415e7",
-  "html_sha256": "de04da9375fa319aea3d4e34bb9c6233b4bf0f4583779dbda0977cde405b033f",
+  "html_sha256": "959783037007dde779048c1f86954499d7e12a5e0a11c585a8dd8ea15482b9ca",
   "checks": [
     "identity and meaningful screen",
     "three browsing modes",
