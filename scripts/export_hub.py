@@ -18,7 +18,7 @@ def export(hub):
     assert (hub / 'site/build.py').is_file() and (hub / 'publications/README.md').is_file(), 'Choose an OSRI hub checkout.'
     target = hub / 'publications/venues'
     target.mkdir(exist_ok=True)
-    text = (ROOT / 'DIRECTORY.md').read_text().replace('docs/subfields/', 'subfields/').replace('docs/methodology.md', 'methodology.md')
+    text = (ROOT / 'DIRECTORY.md').read_text().replace('docs/subfields/', 'subfields/').replace('docs/methodology.md', 'methodology.md').replace('docs/display-policy.md', 'display-policy.md')
     text += '\nThis is a generated snapshot of the OSRI free-publication directory. The [snapshot manifest](snapshot.json) and [evidence receipt](build-receipt.json) preserve its source hashes. [Download the venue CSV](venues.csv), [inspect JSON](venues.json), review [all audited candidates](candidates.json) and [exclusions](excluded-venues.json), or read the [agent findings](RESEARCH_NOTES.md).\n'
     cost_report = ROOT / 'docs/cost-verification.md'
     if cost_report.exists():
@@ -31,11 +31,15 @@ def export(hub):
         report = quality_report.read_text().replace('../research/', 'research/').replace('../data/build-receipt.json', 'build-receipt.json')
         (target / 'quality-review.md').write_text(report)
     (target / 'README.md').write_text(text)
+    shutil.copy2(ROOT / 'docs/display-policy.md', target / 'display-policy.md')
     shutil.copy2(ROOT / 'docs/methodology.md', target / 'methodology.md')
-    browser = (ROOT / 'index.html').read_text(encoding='utf-8')
-    for old, new in [('href="DIRECTORY.md"', 'href="README.md"'), ('href="docs/quality-review.md"', 'href="quality-review.md"'), ('href="docs/methodology.md"', 'href="methodology.md"'), ('href="data/venues.csv"', 'href="venues.csv"'), ('href="data/venues.json"', 'href="venues.json"')]:
-        browser = browser.replace(old, new)
-    (target / 'browser.html').write_text(browser, encoding='utf-8')
+    for source, name in [('index.html','browser.html'),('browser-fragment.html','browser-fragment.html')]:
+        browser = (ROOT / source).read_text(encoding='utf-8')
+        for old, new in [('href="DIRECTORY.md"', 'href="README.md"'), ('href="docs/quality-review.md"', 'href="quality-review.md"'), ('href="docs/methodology.md"', 'href="methodology.md"'), ('href="data/venues.csv"', 'href="venues.csv"'), ('href="data/venues.json"', 'href="venues.json"')]:
+            browser = browser.replace(old, new)
+        (target / name).write_text(browser, encoding='utf-8')
+    for asset in ('directory.css','directory.js'):
+        shutil.copy2(ROOT / asset, target / asset)
     shutil.copy2(ROOT / 'LICENSE.md', target / 'LICENSE.md')
     shutil.copytree(ROOT / 'docs/subfields', target / 'subfields', dirs_exist_ok=True)
     for source in ['data/venues.csv', 'data/venues.json', 'data/candidates.json', 'data/excluded-venues.json', 'data/memberships.json', 'data/coverage.json', 'data/agent-assignments.json', 'data/build-receipt.json', 'data/validation.json']:

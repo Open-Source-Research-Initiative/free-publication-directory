@@ -61,7 +61,10 @@ class QualityTest(unittest.TestCase):
     def test_status_gate_and_hold(self):
         d=build.read(self.base/'decisions.json'); d['decisions'][0]['quality']['status']='supported'; self.write('decisions.json',d)
         with self.assertRaises(AssertionError): self.run_gate(copy.deepcopy(self.members))
-        v=copy.deepcopy(self.baseline[0]); v['route'].update(eligibility='verified_free',submission_fee='none',publication_fee='none'); v['review']['type']='peer_reviewed'; self.assertTrue(build.recommended(v)); v['quality']={'status':'concerns'}; self.assertTrue(build.recommended_before_quality(v)); self.assertFalse(build.recommended(v))
+        v=copy.deepcopy(self.baseline[0]); v['route'].update(eligibility='verified_free',submission_fee='none',publication_fee='none'); v['review']['type']='peer_reviewed'
+        for status, expected in [('supported',True),('needs_verification',False),('concerns',False)]:
+            v['quality']={'status':status}; self.assertTrue(build.recommended_before_quality(v)); self.assertEqual(build.recommended(v),expected)
+        v.pop('quality'); self.assertFalse(build.recommended(v))
     def test_supplemental_receipt_and_citation(self):
         ident=self.baseline[0]['id']; rel=str(CAMPAIGN/'completions/test.json')
         self.write('completions/test.json', {'checked_on':'2026-11-16','agent_task':'/test/supplement','batch':'test','records':[{'id':ident,'quality':self.q}]})
@@ -73,6 +76,17 @@ class QualityTest(unittest.TestCase):
         self.assertTrue(all(rel in m['source_files'] for m in members if m['id'] in self.baseline[0]['source_record_ids']))
         d['decisions'][1]['supplemental_files']=[rel]; self.write('decisions.json',d)
         with self.assertRaisesRegex(AssertionError,'invalid supplemental evidence'): self.run_gate(copy.deepcopy(self.members))
+
+    def test_display_views_keep_costs_and_quality_separate(self):
+        base=copy.deepcopy(self.baseline[0]); base['route'].update(eligibility='verified_free',submission_fee='none',publication_fee='none'); base['review']['type']='peer_reviewed'
+        venues=[]
+        for status in ['supported','needs_verification','concerns']:
+            v=copy.deepcopy(base); v['id']=status; v['quality']={'status':status}; venues.append(v)
+        unknown=copy.deepcopy(venues[0]); unknown['id']='unverified-cost'; unknown['route']['eligibility']='needs_verification'; venues.append(unknown)
+        views=build.display_views(venues)
+        self.assertEqual(views['documented'],['supported'])
+        self.assertEqual(views['incomplete'],['supported','needs_verification'])
+        self.assertEqual(views['all'],['supported','needs_verification','concerns','unverified-cost'])
     def test_supplemental_review_citation(self):
         ident=self.baseline[0]['id']; name='reviews/supplement-source-challenge.json'; rel=str(CAMPAIGN/name)
         review={'checked_on':'2026-11-16','agent_task':'/test/challenge','scope':'sample','records':[{'id':ident,'outcome':'confirm','observations':'Checked','sources':['https://example.org']}]}

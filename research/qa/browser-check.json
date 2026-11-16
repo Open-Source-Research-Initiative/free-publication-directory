@@ -1,21 +1,26 @@
 {
   "status": "pass",
-  "default_results": 73,
+  "browser": "Playwright; Browser plugin not available",
+  "default_results": 57,
+  "expanded_results": 73,
   "total_venues": 146,
   "subfields_checked": 24,
   "catalog_sha256": "f7a789636be58f7aa965f4ea17fb7ff54ece0e9b0625e9fc6ad55113419415e7",
-  "html_sha256": "e05b3d99cd571fe4f402c9b69b2024aac0416e014960cb387bf827ce33fe0560",
+  "html_sha256": "959783037007dde779048c1f86954499d7e12a5e0a11c585a8dd8ea15482b9ca",
   "checks": [
-    "AI compatibility gate",
-    "cost, review and quality default",
-    "quality filters and reset",
-    "index evidence links",
-    "venue geography filter",
-    "subfield filters",
-    "disclosure and metric display",
+    "identity and meaningful screen",
+    "three browsing modes",
+    "subfields",
+    "compare three and fourth-selection limit",
+    "URL reload and history",
+    "selection across filters",
+    "remove and clear",
+    "concerns remain visible",
+    "venue and publisher geography",
+    "lazy source panels",
     "metric sorts",
-    "empty state and reset",
-    "desktop and mobile",
-    "browser errors"
+    "empty state",
+    "desktop/tablet/mobile",
+    "no browser errors"
   ]
 }

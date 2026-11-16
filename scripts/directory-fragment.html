@@ -1,0 +1,24 @@
+<section id="venue-directory" class="venue-directory" data-provenance-base="">
+<div class="directory-intro"><p class="eyebrow">Publication venues</p><h1>Find a free publication route.</h1><p>Compare venues by research fit, author costs, AI disclosure, and editorial evidence.</p></div>
+<form id="filters" role="search" aria-label="Filter publication venues"><div class="primary-filters">
+<label>Search venues and scope<input id="query" type="search" placeholder="e.g. simulation, public health, software"></label>
+<label>Research subfield<select id="subfield"><option value="">All subfields</option></select></label>
+<label>Browse<select id="view"><option value="documented">Free + core standards documented</option><option value="incomplete">Include incomplete quality checks</option><option value="all">All directory records</option></select></label></div>
+<p id="view-note" class="directory-note"></p>
+<details id="more-filters"><summary>More filters</summary><div class="advanced-filters">
+<label>Fee status<select id="eligibility"><option value="">Any fee status</option><option value="verified_free">Verified free routes</option><option value="conditional">Conditional funding or waiver</option><option value="needs_verification">Costs need verification</option></select></label>
+<label>Quality evidence<select id="quality"><option value="">Any quality status</option><option value="supported">Core standards documented</option><option value="needs_verification">Verification incomplete</option><option value="concerns">Concerns documented</option></select></label>
+<label>Location basis<select id="location-basis"><option value="venue">Venue / owning body</option><option value="publisher">Publisher</option></select></label>
+<label><span id="region-label">Venue region</span><select id="region"><option value="">All regions</option></select></label>
+<label><span id="country-label">Venue country</span><select id="country"><option value="">All countries</option></select></label>
+<label class="check-label"><input id="peer" type="checkbox">Peer-reviewed venues only</label></div>
+<p class="directory-note">Location describes the venue or publisher; author eligibility is separate. Filters narrow the selected browsing mode. Choose All directory records to inspect conditional costs or documented concerns.</p></details>
+<div class="directory-toolbar"><p id="result-count" role="status" aria-live="polite"></p><div><label>Sort results<select id="sort"><option value="name">Venue name</option><option value="acceptance">Reported acceptance rate</option><option value="jif">Journal Impact Factor</option><option value="citescore">CiteScore</option></select></label><button id="reset-filters" type="button">Reset filters</button></div></div></form>
+<p id="sort-note" class="directory-note"></p><p id="selection-notice" role="status" aria-live="polite"></p>
+<details id="comparison" hidden><summary id="comparison-summary">Compare selected venues</summary><p>Check scope and conditions for your manuscript. These comparisons do not predict acceptance.</p><div id="comparison-content"></div></details>
+<div id="shortlist-bar" hidden><strong id="shortlist-count"></strong><button id="show-comparison" type="button">View comparison</button><button id="clear-shortlist" type="button">Clear shortlist</button><span class="directory-note">Bookmark or share this URL to keep your selection.</span></div>
+<section id="results" aria-label="Publication venues" tabindex="-1"></section>
+
+<details class="coverage-details"><summary>Coverage, sources, and verification</summary><p id="coverage-counts"></p><p>AI compatibility covers substantive human-led research, analysis/code, and drafting under the venue's conditions. Costs and quality are separate checks. Documented policies do not certify individual papers. Missing evidence does not establish misconduct.</p><nav aria-label="Directory evidence"><a href="DIRECTORY.md">Browse by field</a><a href="docs/quality-review.md">Quality findings</a><a href="docs/methodology.md">Methodology</a><a href="data/venues.csv" download>Download CSV</a><a href="data/venues.json" download>JSON</a></nav></details>
+<noscript><p>Use the <a href="DIRECTORY.md">field guides</a> or <a href="data/venues.csv">CSV file</a> to browse without JavaScript.</p></noscript>
+<script id="venue-catalog" type="application/json">/*CATALOG_DATA*/</script></section>

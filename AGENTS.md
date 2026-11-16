@@ -6,6 +6,8 @@ The active expansion follows [the 2026-11-16 expansion contract](research/campai
 
 The [quality evidence campaign](research/campaigns/2026-11-16-quality/CONTRACT.md) adds source-backed indexing, peer-review and editorial-standard findings. Preserve its baseline and historical evidence. Documented concerns and incomplete verification are distinct; journal-level policies and indexing do not certify individual papers.
 
+The current [display policy](docs/display-policy.md) requires free author costs and documented core standards in the default view. It supersedes the historical campaign default; incomplete checks and concerns remain inspectable through expanded modes. Never edit evidence to make a venue satisfy a display filter.
+
 - Read `research/campaigns/2026-11-16-expansion/CONTRACT.md` before adding or reviewing records. Follow assigned ownership and preserve other agents' files.
 - Verify current material claims using official venue or publisher sources. A search result snippet is weaker evidence than the policy page. Record ambiguity instead of inventing a fee, metric, indexing claim, or acceptance rate.
 - Submission fees, publication fees, mandatory membership, page charges, and conference registration are separate costs. Optional open access does not disqualify a genuinely free subscription route. Waivers and institutional agreements are conditional routes.
