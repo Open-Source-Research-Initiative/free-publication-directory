@@ -1,27 +1,19 @@
 {
   "status": "pass",
-  "default_results": 112,
-  "total_venues": 169,
-  "subfields_checked": 12,
-  "closed_venues_checked": 1,
-  "catalog_sha256": "71f8e0f111c838080f52f1d0787763c2dd5aecdfbee91bd407bd6d774c4eb6d8",
-  "html_sha256": "0276a5c07cf5906d0026fafdd794945bfde0d087e635d74db638ec2d9202abb5",
+  "default_results": 70,
+  "total_venues": 146,
+  "subfields_checked": 24,
+  "catalog_sha256": "607d5636ecdaab84e7c74d92afe2c5fc2177495d73c0d44a0472405c483dd897",
+  "html_sha256": "2fe9f96e66b29eac0e7bcebdf2dc4cf5f9d5270249034471f5fd0bcd4aee4cd0",
   "checks": [
-    "default cost/review/availability gate",
-    "expandable fee evidence",
-    "cross-field ranking guard",
-    "all subfield filter counts",
-    "empty state",
-    "reset",
-    "all statuses and dissemination kinds",
-    "known closed labels",
-    "desktop rendering",
-    "mobile filtering and overflow",
-    "no browser script errors"
-  ],
-  "browser": "Playwright Chromium from existing installation; no Browser/IAB tool is available in this session",
-  "viewports": [
-    "1440x1100",
-    "390x844"
+    "AI compatibility gate",
+    "cost and review default",
+    "venue geography filter",
+    "subfield filters",
+    "disclosure and metric display",
+    "metric sorts",
+    "empty state and reset",
+    "desktop and mobile",
+    "browser errors"
   ]
 }
