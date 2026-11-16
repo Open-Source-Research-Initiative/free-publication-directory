@@ -1,0 +1,47 @@
+name: Share a directory-use report
+description: Tell us whether a shortlist helped and where you got stuck.
+title: "Directory use: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Try one research topic and tell us what happened. A no-fit result is useful. A public topic description is enough; no manuscript upload is needed. We ask separately before quoting your experience publicly.
+  - type: input
+    id: topic
+    attributes:
+      label: Research field and article type
+      placeholder: A brief topic you may share publicly
+    validations:
+      required: true
+  - type: input
+    id: shortlist
+    attributes:
+      label: Shortlist URL or filters used
+      description: Select up to three venues and copy the directory URL, or describe your search.
+  - type: dropdown
+    id: fit
+    attributes:
+      label: Did you find a plausible venue?
+      options:
+        - Found at least one plausible venue
+        - No venue fitted this example
+        - Not sure yet
+    validations:
+      required: true
+  - type: textarea
+    id: experience
+    attributes:
+      label: What helped or got in the way?
+      description: Explain the fit or lack of fit, relevant conditions, and any step that needed explanation.
+    validations:
+      required: true
+  - type: textarea
+    id: assistance
+    attributes:
+      label: Material AI or agent assistance (if any)
+  - type: input
+    id: credit
+    attributes:
+      label: Public credit preference (optional)
+      description: A name/handle, or no public credit. Feedback does not automatically become an accepted task.

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Choose a small starter task
+    url: https://github.com/Open-Source-Research-Initiative/free-publication-directory/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+    about: Volunteer for a source check or directory trial; no code required.
+  - name: Contribute without a GitHub account
+    url: mailto:cole.lyons@pennmedicine.upenn.edu?subject=OSRI%20venue%20directory%20contribution
+    about: Send a short note. A maintainer can prepare a public record with your permission.
