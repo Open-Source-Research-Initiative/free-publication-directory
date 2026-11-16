@@ -1,0 +1,39 @@
+name: Report a venue correction or source
+description: Share a short evidence note; no code or pull request required.
+title: "Venue evidence: "
+labels: [documentation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for checking a source. Uncertainty and useful confirmation are welcome. Issues are public; share only material you may publish. Maintainers prepare any data changes after review.
+  - type: input
+    id: venue
+    attributes:
+      label: Venue
+      placeholder: Journal or conference name, or directory record URL
+    validations:
+      required: true
+  - type: textarea
+    id: finding
+    attributes:
+      label: What did you find?
+      description: Explain the observation, correction or question, including important conditions.
+      placeholder: For costs, report submission and publication separately. Unknown is a valid finding.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Official sources and check date
+      description: Link the applicable section and give the date checked. If unreadable or not checked yet, say so.
+  - type: textarea
+    id: assistance
+    attributes:
+      label: Material AI or agent assistance
+      description: If used, name the tool and what you checked yourself. Otherwise leave blank.
+  - type: input
+    id: credit
+    attributes:
+      label: Public credit preference (optional)
+      description: A name/handle, or no public credit. A maintainer will confirm before recording accepted work.
